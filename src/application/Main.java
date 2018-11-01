@@ -15,7 +15,7 @@ public class Main extends Application {
 			Scene scene =  new Scene(root);
 			
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-			primaryStage.setTitle("FXML Welcome");
+			primaryStage.setTitle("File Explorer");
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch(Exception e) {

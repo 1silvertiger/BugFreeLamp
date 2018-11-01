@@ -1,52 +1,51 @@
 package application;
 
-import javafx.beans.property.SimpleStringProperty;
-
 public class File {
 
-	private SimpleStringProperty fileName;
-	private SimpleStringProperty fileType;
-	private SimpleStringProperty fileSize;
-	private SimpleStringProperty filePath;
+	private String fileName;
+	private String fileType;
+	private String fileSize;
+	private String filePath;
 
-	private File(String pFileName, String pFileType, String pFileSize, String pFilePath) {
-        fileName = new SimpleStringProperty(pFileName);
-        fileType = new SimpleStringProperty(pFileType);
-        fileSize = new SimpleStringProperty(pFileSize);
-        filePath = new SimpleStringProperty(pFilePath);
+	public File(String pFileName, String pFileType, String pFileSize, String pFilePath) {
+        fileName = pFileName;
+        fileType = pFileType;
+        fileSize = pFileSize;
+        filePath = pFilePath;
     }
 	
-	public SimpleStringProperty getFileName() {
+	public String getFileName() {
 		return fileName;
 	}
 
-	public void setFileName(SimpleStringProperty fileName) {
+	public void setFileName(String fileName) {
 		this.fileName = fileName;
 	}
 
-	public SimpleStringProperty getFileType() {
+	public String getFileType() {
 		return fileType;
 	}
 
-	public void setFileType(SimpleStringProperty fileType) {
+	public void setFileType(String fileType) {
 		this.fileType = fileType;
 	}
 
-	public SimpleStringProperty getFileSize() {
+	public String getFileSize() {
 		return fileSize;
 	}
 
-	public void setFileSize(SimpleStringProperty fileSize) {
+	public void setFileSize(String fileSize) {
 		this.fileSize = fileSize;
 	}
 
-	public SimpleStringProperty getFilePath() {
+	public String getFilePath() {
 		return filePath;
 	}
 
-	public void setFilePath(SimpleStringProperty filePath) {
+	public void setFilePath(String filePath) {
 		this.filePath = filePath;
 	}
+	
 	
 
 }
