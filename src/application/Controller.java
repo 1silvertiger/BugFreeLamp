@@ -17,14 +17,17 @@ import java.util.stream.Stream;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-public class Controller {
+public class Controller implements Initializable {
 	
 	@FXML
 	Button goButton;	
@@ -45,6 +48,21 @@ public class Controller {
 	@FXML
 	Label displayNumberOfItems;
 	
+	@FXML
+	TreeView<String> hierarchyTree;
+	
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		TreeItem<String> rootItem = new TreeItem<String>("Root");
+		rootItem.setExpanded(true);
+		for (int i = 0; i <10; i++)
+			rootItem.getChildren().add(new TreeItem<String>("Child " + i));
+		hierarchyTree = new TreeView<String>(rootItem);
+		System.out.println(rootItem.getValue());
+		for (TreeItem<String> ri : rootItem.getChildren())
+			System.out.println(ri.getValue());
+	}
+
 	@FXML
 	void handleClick() {
 		
