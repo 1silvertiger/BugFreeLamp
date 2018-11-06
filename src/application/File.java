@@ -4,27 +4,23 @@ import java.nio.file.Path;
 
 public class File {
 
-	private String fileName;
+	private Path fileName;
 	private String fileType;
-	private String fileSize;
+	private long fileSize;
 	private Path filePath;
 
-	public File(String pFileName, String pFileType, String pFileSize, Path pFilePath) {
+	public File(Path pFileName, String pFileType, long pFileSize, Path pFilePath) {
         fileName = pFileName;
         fileType = pFileType;
         fileSize = pFileSize;
         filePath = pFilePath;
     }
 	
-	public File(Path pFilePath) {
-        filePath = pFilePath;
-    }
-	
-	public String getFileName() {
+	public Path getFileName() {
 		return fileName;
 	}
 
-	public void setFileName(String fileName) {
+	public void setFileName(Path fileName) {
 		this.fileName = fileName;
 	}
 
@@ -36,11 +32,11 @@ public class File {
 		this.fileType = fileType;
 	}
 
-	public String getFileSize() {
+	public long getFileSize() {
 		return fileSize;
 	}
 
-	public void setFileSize(String fileSize) {
+	public void setFileSize(long fileSize) {
 		this.fileSize = fileSize;
 	}
 

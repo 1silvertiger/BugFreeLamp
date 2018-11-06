@@ -9,11 +9,16 @@ import java.nio.file.PathMatcher;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -35,6 +40,10 @@ public class Controller {
 	TableColumn<File, String> colSize;	
 	@FXML
 	TableColumn<File, Path> colPath;
+	@FXML
+	Label numberOfItemsLbl;
+	@FXML
+	Label displayNumberOfItems;
 	
 	@FXML
 	void handleClick() {
@@ -52,13 +61,38 @@ public class Controller {
 		}
 		*/
 		
-		ObservableList<File> data = FXCollections.observableArrayList();
-		
 		String searchInput = searchField.getText();
+		Path searchInputPath = Paths.get(searchInput);
+		ObservableList<File> data = FXCollections.observableArrayList();
+		List<Path> searchOutput = new ArrayList<>();
+		String fileTypeValue;
+		long fileSizeValue;
+		
 		try {
-			Files.walk(Paths.get(searchInput))
-				.filter(Files::isRegularFile)
-				.forEach(path -> data.add(new File(path)));
+			searchOutput =  Files.walk(Paths.get(searchInput)).collect(Collectors.toList());
+			
+			for(Path path : searchOutput) {
+				BasicFileAttributes fileAttr = Files.readAttributes(path, BasicFileAttributes.class);
+				if(!path.equals(searchInputPath)) {
+					Path pathName = searchInputPath.relativize(path);
+					
+					if(fileAttr.isDirectory()) {
+						fileTypeValue = "Folder";
+					} else if (fileAttr.isSymbolicLink()) {
+						fileTypeValue = "Shortcut";
+					} else if(fileAttr.isRegularFile()) {
+						fileTypeValue = "File";
+					} else {
+						fileTypeValue = "Other";
+					}
+					
+					fileSizeValue = fileAttr.size();
+					
+					data.add(new File(pathName, fileTypeValue, fileSizeValue, path));
+				}
+			}
+				/*.filter(Files::isDirectory)
+				.forEach(path -> data.add(new File("Name", "Folder", path)));*/
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -71,9 +105,9 @@ public class Controller {
 			    new File("Michael", "File", "100 KB", "C:\\Users\\andri\\Desktop")
 			);*/
 		
-		/*colName.setCellValueFactory(new PropertyValueFactory<>("fileName"));
+		colName.setCellValueFactory(new PropertyValueFactory<>("fileName"));
 		colType.setCellValueFactory(new PropertyValueFactory<>("fileType"));
-		colSize.setCellValueFactory(new PropertyValueFactory<>("fileSize"));*/
+		colSize.setCellValueFactory(new PropertyValueFactory<>("fileSize"));
 		colPath.setCellValueFactory(new PropertyValueFactory<>("filePath"));
 				
 		table.setItems(data);
