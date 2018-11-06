@@ -1,16 +1,22 @@
 package application;
 
+import java.nio.file.Path;
+
 public class File {
 
 	private String fileName;
 	private String fileType;
 	private String fileSize;
-	private String filePath;
+	private Path filePath;
 
-	public File(String pFileName, String pFileType, String pFileSize, String pFilePath) {
+	public File(String pFileName, String pFileType, String pFileSize, Path pFilePath) {
         fileName = pFileName;
         fileType = pFileType;
         fileSize = pFileSize;
+        filePath = pFilePath;
+    }
+	
+	public File(Path pFilePath) {
         filePath = pFilePath;
     }
 	
@@ -38,11 +44,11 @@ public class File {
 		this.fileSize = fileSize;
 	}
 
-	public String getFilePath() {
+	public Path getFilePath() {
 		return filePath;
 	}
 
-	public void setFilePath(String filePath) {
+	public void setFilePath(Path filePath) {
 		this.filePath = filePath;
 	}
 	

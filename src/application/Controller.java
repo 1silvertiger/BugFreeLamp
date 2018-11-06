@@ -1,5 +1,15 @@
 package application;
 
+import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.PathMatcher;
+import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -24,28 +34,73 @@ public class Controller {
 	@FXML
 	TableColumn<File, String> colSize;	
 	@FXML
-	TableColumn<File, String> colPath;
+	TableColumn<File, Path> colPath;
 	
 	@FXML
 	void handleClick() {
-		String searchInput = searchField.getText();
 		
-		ObservableList<File> data = FXCollections.observableArrayList(
-				new File("Jacob", "File", "100 KB", "C:\\Users\\andri\\Desktop"),
+		/*
+		 * String rootPath = "C:/";
+		String searchInput = "glob:" + searchField.getText();
+		ObservableList<File> data = FXCollections.observableArrayList();
+		
+		try {
+			System.out.println(browse(searchInput, rootPath));
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		*/
+		
+		ObservableList<File> data = FXCollections.observableArrayList();
+		
+		String searchInput = searchField.getText();
+		try {
+			Files.walk(Paths.get(searchInput))
+				.filter(Files::isRegularFile)
+				.forEach(path -> data.add(new File(path)));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+				/*new File("Jacob", "File", "100 KB", "C:\\Users\\andri\\Desktop"),
 			    new File("Isabella", "Directory", "100 KB", "C:\\Users\\andri\\Desktop"),
 			    new File("Ethan","File", "100 KB", "C:\\Users\\andri\\Desktop"),
 			    new File("Emma", "Directory", "100 KB", "C:\\Users\\andri\\Desktop"),
 			    new File("Michael", "File", "100 KB", "C:\\Users\\andri\\Desktop")
-			);
+			);*/
 		
-		colName.setCellValueFactory(new PropertyValueFactory<>("fileName"));
+		/*colName.setCellValueFactory(new PropertyValueFactory<>("fileName"));
 		colType.setCellValueFactory(new PropertyValueFactory<>("fileType"));
-		colSize.setCellValueFactory(new PropertyValueFactory<>("fileSize"));
+		colSize.setCellValueFactory(new PropertyValueFactory<>("fileSize"));*/
 		colPath.setCellValueFactory(new PropertyValueFactory<>("filePath"));
 				
 		table.setItems(data);
 		
-		System.out.println("placeholder");
-		//colPath.setText(searchInput);
+	}
+	
+	public static void browse(String glob, String location) throws IOException {
+		
+		final PathMatcher pathMatcher = FileSystems.getDefault().getPathMatcher(
+				glob);
+		
+		Files.walkFileTree(Paths.get(location), new SimpleFileVisitor<Path>() {
+			
+			@Override
+			public FileVisitResult visitFile(Path path,
+					BasicFileAttributes attrs) throws IOException {
+				if (pathMatcher.matches(path)) {
+					System.out.println(path);
+				}
+				return FileVisitResult.CONTINUE;
+			}
+
+			@Override
+			public FileVisitResult visitFileFailed(Path file, IOException exc)
+					throws IOException {
+				return FileVisitResult.CONTINUE;
+			}
+		});
 	}
 }
